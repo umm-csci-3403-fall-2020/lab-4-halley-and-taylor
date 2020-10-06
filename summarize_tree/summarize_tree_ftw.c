@@ -8,12 +8,15 @@ static int num_dirs, num_regular;
 static int callback(const char *fpath, const struct stat *sb, int typeflag){
 if(typeflag == FTW_F){
 num_regular++;
-return 1;
+return 0;
 }
 else if(typeflag == FTW_D){
 num_dirs++;
 return 0;
 }
+else
+printf("ERROR");
+return 1;
 }
 
 int main(int argc, char** argv){
@@ -29,6 +32,6 @@ num_regular = 0;
 
 ftw(argv[1], callback, MAX_FTW_DEPTH);
 
-printf("There were %d directories,\n", num_dirs);
+printf("There were %d directories.\n", num_dirs);
 printf("There were %d regular files.\n", num_regular);
 }
