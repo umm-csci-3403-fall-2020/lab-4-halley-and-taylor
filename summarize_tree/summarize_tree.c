@@ -9,10 +9,12 @@
 static int num_dirs, num_regular;
 
 bool is_dir(const char* path) {
-  
+   
+   bool isDir;
    struct stat stats;
    if(stat(path, &stats) == 0){
-	return S_ISDIR(stats.st_mode);
+	isDir = S_ISDIR(stats.st_mode);
+	return isDir;
    }
    else{return false;}
 }
@@ -21,30 +23,29 @@ void process_path(const char*);
 
 void process_directory(const char* path) {
   
-   DIR *dr = opendir(path);
-   struct dirent *entry;
-   chdir(path);
+  num_dirs++;
+  DIR *newDir;
+  struct dirent *stuff;
 
-   while((entry = readdir(dr)) != NULL){
-   if(entry->d_name == "."||entry->d_name == ".."){
-   num_dirs++;
-   }
-   }
+  if((newDir = opendir(path)) == NULL){
+  	printf("ERROR");
+	exit(0);
+  }
+  chdir(path);
 
-   chdir("..");
-   closedir(dr);
+  
+ while(stuff = readdir(newDir)){
+  	if(strcmp(stuff->d_name,".") != 0 && strcmp(stuff->d_name,"..") != 0){
+		process_path(stuff->d_name);
+	}
+  }
+
+  chdir("..");
+  closedir(newDir);
 }
 
 void process_file(const char* path) {
-  
-   DIR *dr = opendir(path);
-   struct dirent *entry;
-   while((entry = readdir(dr)) != NULL){
-   if(entry->d_type == DT_REG){
    num_regular++;
-   }
-   }
-   closedir(dr);
 }
 
 void process_path(const char* path) {
