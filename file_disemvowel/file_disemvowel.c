@@ -5,10 +5,7 @@
 #define BUF_SIZE 1024
 
 bool is_vowel(char c) {
-  /*
-   * Returns true if c is a vowel (upper or lower case), and
-   * false otherwise.
-   */
+  
   if(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' ){
     return true;
   }
@@ -16,12 +13,7 @@ bool is_vowel(char c) {
 }
 
 int copy_non_vowels(int num_char, char* in_buff, char* out_buff){
-  /*
-   * Copy all the non-vowels from in_buf to out_buf.
-   * num_chars indicates how many characters are in in_buf,
-   * and this function should return the number of non-vowels that
-   * that were copied over.
-   */
+  
   int index =0;
   for(int i = 0; i< num_char-1; i++){
     if( is_vowel(in_buff[i]) == false ){
@@ -39,24 +31,18 @@ void disemvowel(FILE* inputFile, FILE* outputFile) {
    * in a buffer of data, copy the non-vowels to the output buffer, and
    * use fwrite to write that out.
    */
-  char* inBuff = (char*)calloc(BUF_SIZE, sizeof(char));
-  char* outBuff = (char*)calloc(BUF_SIZE, sizeof(char));
+  char inBuff[BUF_SIZE];
+  char outBuff[BUF_SIZE];
   int nChars = 0;
-  nChars = (int)fread(inBuff, sizeof(char), BUF_SIZE, inputFile); 
+  nChars = (int) fread(inBuff, sizeof(char), BUF_SIZE, inputFile);
   if(nChars != 0){
-    int Consts = copy_non_vowels(nChars, inBuff, outBuff);
-    fwrite(outBuff, sizeof(char), Consts, outputFile);
+   int Consts = copy_non_vowels(nChars, inBuff, outBuff);
+   fwrite(outBuff, sizeof(char), Consts, outputFile);
   }
-  free(inBuff);
-  free(outBuff);
-  fclose(inputFile);
-  fclose(outputFile);
 }
 
 int main(int argc, char *argv[]) {
-  // You should set these to `stdin` and `stdout` by default
-  // and then set them to user specified files when the user
-  // provides files names as command line arguments.
+  
   FILE *inputFile = stdin;
   FILE *outputFile = stdout;
 
@@ -76,9 +62,8 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  // Code that processes the command line arguments
-  // and sets up inputFile and outputFile.
-
   disemvowel(inputFile, outputFile);
+  fclose(inputFile);
+  fclose(outputFile);
   return 0;
 }
